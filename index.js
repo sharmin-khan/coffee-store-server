@@ -33,6 +33,14 @@ async function run() {
       const result = await cursor.toArray(); // convert cursor to an array of objects
       res.send(result); // send the result as the response
     });
+    
+// Get a specific coffee by ID
+app.get('/coffees/:id', async (req, res) => {
+  const id = req.params.id; // Get the ID from URL params
+  const query = { _id: new ObjectId(id) }; // Convert ID to MongoDB ObjectId
+  const result = await coffeesCollection.findOne(query); // Find the coffee with this ID
+  res.send(result); // Send the result back to the client
+});
 
     // Handle POST requests to add a new coffee to the database
     app.post("/coffees", async (req, res) => {
