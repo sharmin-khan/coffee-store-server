@@ -1,5 +1,5 @@
 const express = require("express");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 const cors = require("cors");
 const app = express();
@@ -38,13 +38,32 @@ async function run() {
     app.post("/coffees", async (req, res) => {
       const newCoffee = req.body; // Get the new coffee data sent from the frontend
       console.log(newCoffee); // Log the data to verify it's received correctly
-
       // Insert the new coffee into the 'coffees' collection in MongoDB
       const result = await coffeesCollection.insertOne(newCoffee);
-
       // Send back the result of the insert operation to the client
       res.send(result);
     });
+
+
+// Handle DELETE request to remove a specific coffee by ID
+app.delete('/coffee/:id', async (req, res) => {
+  
+  // Extract the ID from the request URL parameters
+  const id = req.params.id;
+
+  // Create a MongoDB query object using the extracted ID
+  const query = { _id: new ObjectId(id) };
+
+  // Delete one matching document from the coffeesCollection
+  const result = await coffeesCollection.deleteOne(query);
+
+  // Send the result (success/failure info) back to the client
+  res.send(result);
+});
+
+
+
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
