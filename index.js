@@ -46,7 +46,7 @@ async function run() {
 
 
 // Handle DELETE request to remove a specific coffee by ID
-app.delete('/coffee/:id', async (req, res) => {
+app.delete('/coffees/:id', async (req, res) => {
   
   // Extract the ID from the request URL parameters
   const id = req.params.id;
