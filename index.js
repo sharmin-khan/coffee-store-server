@@ -53,6 +53,30 @@ app.get('/coffees/:id', async (req, res) => {
     });
 
 
+  // UPDATE a specific coffee by ID
+app.put('/coffees/:id', async (req, res) => {
+  const id = req.params.id; // get the coffee id from URL
+  const filter = { _id: new ObjectId(id) }; // find the coffee with this id
+  const option = { upsert: true }; // if not found, insert it (optional)
+
+  const updatedCoffee = req.body; // data received from client (updated info)
+
+  const updatedDoc = {
+    $set: updatedCoffee // set the updated fields
+  };
+
+  // If you want to update specific fields manually:
+  // const updatedDoc = {
+  //   $set: {
+  //     name: updatedCoffee.name,
+  //     supplier: updatedCoffee.supplier,
+  //   }
+  // };
+
+  const result = await coffeesCollection.updateOne(filter, updatedDoc, option); // update in DB
+  res.send(result); // send back the result
+});
+
 // Handle DELETE request to remove a specific coffee by ID
 app.delete('/coffees/:id', async (req, res) => {
   
